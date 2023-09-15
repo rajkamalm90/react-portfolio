@@ -1,0 +1,102 @@
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
+import '../Api.css';
+
+const FileList = () => {
+  const [files, setFiles] = useState([]);
+
+  useEffect(() => {
+    // Fetch data from the API using Axios
+    axios({
+      method: 'get',
+      url: 'http://localhost:4000/upload' // Use the correct route '/uploads'
+    })
+      .then(response => {
+        // Update the state with the fetched data
+        console.log(response);
+        setFiles(response.data);
+      })
+      .catch(error => {
+        console.error('Error fetching data:', error);
+      });
+  }, []);
+
+  return (
+    <div>
+      <h1>Image Data List</h1>
+      <table border="2" bgcolor="yellow">
+        <tbody>
+          <tr>
+            <th>id</th>
+            <th>name</th>
+            <th>thumbnail</th>
+          </tr>
+          {files.map((item, index) => (
+            <tr key={item._id}>
+              <td className="Apicell">{item._id}</td>
+              <td className="Apicell">{item.name}</td>
+              <td className="Apicell">
+                {console.log('image', item.path)}
+                <img src={`http://localhost:4000/${item.path}`}width="30%"height="30%" alt="wait"/>
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+  );
+};
+
+export default FileList;
+
+----------------------css-------------------------------------------------------
+
+
+
+.Apicell {
+    border: 1px solid black;
+    padding: 5px;
+  }
+
+
+
+
+
+=============================================                 =================================
+
+method2
+import { useState, useEffect } from "react";
+import ReactDOM from "react-dom/client";
+
+const Home = () => {
+  const [data, setData] = useState(null);
+
+  useEffect(() => {
+    fetch("https://jsonplaceholder.typicode.com/todos")
+      .then((res) => res.json())
+      .then((data) => setData(data));
+ }, []);
+
+  return (
+    <>
+      {data &&
+        data.map((item) => {
+          return <p key={item.id}>{item.title}</p>;
+        })}
+    </>
+  );
+};
+
+const root = ReactDOM.createRoot(document.getElementById('root'));
+root.render(<Home />);
+
+
+
+
+
+
+
+
+
+
+
